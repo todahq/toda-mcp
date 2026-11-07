@@ -1,6 +1,6 @@
 {
   "name": "@todahq/mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Connect Claude Code or Claude Desktop to a Toda site in one command: sets up the abp-mcp bridge for the site, signs you in in your browser, and adds it to Claude.",
   "license": "Apache-2.0",
   "type": "module",
