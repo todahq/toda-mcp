@@ -1,0 +1,39 @@
+{
+  "name": "@todahq/mcp",
+  "version": "0.1.0",
+  "description": "Connect Claude Code or Claude Desktop to a Toda site in one command: sets up the abp-mcp bridge for the site, signs you in in your browser, and adds it to Claude.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "toda-mcp": "./cli/toda-mcp.mjs"
+  },
+  "exports": {
+    ".": "./src/connect.mjs"
+  },
+  "files": [
+    "cli",
+    "src",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "keywords": [
+    "toda",
+    "mcp",
+    "claude",
+    "abp-mcp"
+  ],
+  "homepage": "https://github.com/todahq/toda-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/todahq/toda-mcp.git"
+  },
+  "bugs": "https://github.com/todahq/toda-mcp/issues",
+  "scripts": {
+    "test": "node --test"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

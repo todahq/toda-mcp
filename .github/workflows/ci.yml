@@ -1,0 +1,58 @@
+# Pushes to main and pull requests run the tests on the Node versions the package supports. A v<version> tag runs
+# them, checks the tag is package.json's version and not on npm yet, then publishes to npm through Trusted Publishing
+# (npm gives this workflow a short-lived token over OIDC: no stored secret) with provenance, and makes a GitHub release
+# (see RELEASING.md). Each action is pinned by commit SHA, its version in a comment; Dependabot keeps them current.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        node: ["22", "24"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm test
+      - run: node cli/toda-mcp.mjs --help
+      - run: npm pack --dry-run
+
+  publish:
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    # npm's Trusted Publisher for @todahq/mcp names this repository, ci.yml and this environment.
+    environment: release
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+      # Trusted Publishing needs npm 11.5.1 or later.
+      - run: npm install -g npm@11
+      - name: The tag is package.json's version, not on npm yet
+        run: |
+          version="$(node -p 'require("./package.json").version')"
+          [ "$GITHUB_REF_NAME" = "v$version" ] || { echo "The tag $GITHUB_REF_NAME isn't v$version, package.json's version."; exit 1; }
+          if npm view "@todahq/mcp@$version" version > /dev/null 2>&1; then echo "@todahq/mcp@$version is on npm already."; exit 1; fi
+      - run: npm publish --access public
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes "See CHANGELOG.md for $GITHUB_REF_NAME." --verify-tag

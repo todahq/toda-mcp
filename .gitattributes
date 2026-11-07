@@ -1,0 +1,2 @@
+# LF everywhere: the CLI starts with a shebang, which a CRLF breaks on Linux and macOS.
+* text=auto eol=lf
