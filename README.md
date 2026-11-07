@@ -41,6 +41,8 @@ operating system's keychain.
 
 ## Tools
 
-Toda's own tools are listed for Claude at once. A plugin's tools are found when they're needed: Claude searches with
-`mcp_search_tools`, reads one with `mcp_describe_tools` and calls it with `mcp_call_tool`. So a site with many plugins
-doesn't fill Claude's context before the conversation starts.
+The everyday tools are listed for Claude at once: projects, finding, reading, making, changing and moving records,
+comments, and the site's docs. The rest of Toda's tools (assets, agents, approvals, saved queries) and every plugin's
+are found when they're needed: Claude searches with `mcp_search_tools`, reads one with `mcp_describe_tools` and calls
+it with `mcp_call_tool`. That keeps the tool list to about 3,000 tokens of Claude's context, however many plugins a
+site has.
