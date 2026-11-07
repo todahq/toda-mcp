@@ -29,6 +29,7 @@ On npmjs.com, in `@todahq/mcp`'s settings, under Trusted Publisher, choose GitHu
 | Workflow filename | `ci.yml` |
 | Environment name | `release` |
 
-Then, in the same settings, require two-factor authentication and disallow tokens, so that only this workflow can
-publish. A package must exist on npm before a trusted publisher can be set up, so its first version (0.1.0) was
-published by hand.
+Publishing access doesn't require two-factor authentication, and tokens aren't disallowed: CI needs neither, since
+its token comes over OIDC. That also means an npm token with publish rights on this package can still publish, so
+keep such tokens out of machines and CI that don't need them. A package must exist on npm before a trusted publisher
+can be set up, so its first version (0.1.0) was published by hand.
