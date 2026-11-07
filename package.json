@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "type": "module",
   "bin": {
-    "toda-mcp": "./cli/toda-mcp.mjs"
+    "toda-mcp": "cli/toda-mcp.mjs"
   },
   "exports": {
     ".": "./src/connect.mjs"
